@@ -72,13 +72,52 @@ nmap -Pn -v -n -p80 -b anonymous:password@10.10.110.213 172.17.0.2
 ```
 
 ## SMB
-SMBclient - Connecting to the Share
+
+### Footprinting the service
+```
+sudo nmap 10.129.14.128 -sV -sC -p139,445
+```
+
+### SMBclient - Connecting to the Share
 ```
 smbclient -N -L //10.129.14.128
 smbclient //10.129.14.128/notes
 ```
-Footprinting the service
+
+### Connecting to Share
 
 ```
-sudo nmap 10.129.14.128 -sV -sC -p139,445
+smbclient //10.129.14.128/notes -U john
+```
+
+### RPCclient
+```
+rpcclient -U "" 10.129.14.128
+```
+### RPCclient - Enumeration
+```
+> srvinfo
+> enumdomains
+> querydominfo
+> netshareenumall
+> netsharegetinfo notes
+> querygroup <group_id>
+```
+### Bruteforcing User RIDs
+```
+for i in $(seq 500 1100);do rpcclient -N -U "" 10.129.14.128 -c "queryuser 0x$(printf '%x\n' $i)" | grep "User Name\|user_rid\|group_rid" && echo "";done
+```
+```
+samrdump.py 10.129.14.128
+```
+### SMBmap
+```
+smbmap -H 10.129.14.128
+```
+### CrackMapExec
+```
+crackmapexec smb 10.129.14.128 --shares -u '' -p ''
+```
+```
+./enum4linux-ng.py 10.10.11.45 -A -C
 ```
