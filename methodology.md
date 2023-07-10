@@ -1,3 +1,6 @@
+[Enumeration](#enumeration)<br>
+[SMB](#smb)<br>
+[RPCclien](#rpcclient)
 # Enumeration
 ```
 sudo nmap --script-updatedb
