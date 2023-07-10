@@ -271,7 +271,22 @@ hydra -L users.txt -p 'Company01!' -f 10.10.110.20 pop3
 python3 o365spray.py --spray -U usersfound.txt -p 'March2022!' --count 1 --lockout 1 --domain msplaintext.xyz
 ```
 
-## MySQL & M SSQL
+## SNMP
+For footprinting SNMP, we can use tools like snmpwalk, onesixtyone, and braa.
+### Footprinting the Service
+```
+snmpwalk -v2c -c public 10.129.14.128
+```
+```
+sudo apt install onesixtyone
+onesixtyone -c /opt/useful/SecLists/Discovery/SNMP/snmp.txt 10.129.14.128
+```
+```
+sudo apt install braa
+braa <community string>@<IP>:.1.3.6.*   # Syntax
+braa public@10.129.14.128:.1.3.6.*
+```
+## MySQL & MSSQL
 ### Footprinting the Service
 ```
 sudo nmap 10.129.14.128 -sV -sC -p3306,1433 --script mysql*
@@ -497,3 +512,82 @@ msf6 > use auxiliary/scanner/ipmi/ipmi_dumphashes
 msf6 auxiliary(scanner/ipmi/ipmi_dumphashes) > set rhosts 10.129.42.195
 msf6 auxiliary(scanner/ipmi/ipmi_dumphashes) > show options
 ```
+
+## SSH and RDP
+### Footprinting the Service
+```
+git clone https://github.com/jtesta/ssh-audit.git && cd ssh-audit
+./ssh-audit.py 10.129.14.132
+```
+### Change Authentication Method
+```
+ssh -v cry0l1t3@10.129.14.132
+```
+```
+ssh -v cry0l1t3@10.129.14.132 -o PreferredAuthentications=password
+```
+### Scanning for Rsync
+```
+sudo nmap -sV -p 873 127.0.0.1
+```
+### Probing for Accessible Shares
+```
+nc -nv 127.0.0.1 873
+```
+### Enumerating an Open share
+```
+rsync -av --list-only rsync://127.0.0.1/dev
+```
+### Scanning for R-Services
+```
+sudo nmap -sV -p 512,513,514 10.0.17.2
+```
+### logging in Using Rlogin
+```
+rlogin 10.0.17.2 -l htb-student
+```
+### Listing Authenticated Users Using Rwho
+```
+rwho
+```
+### Listing Authenticated Users Using Rusers
+```
+rusers -al 10.0.17.5
+```
+### Footprinting RDP
+```
+nmap -sV -sC 10.129.201.248 -p3389 --script rdp*
+```
+```
+nmap -sV -sC 10.129.201.248 -p3389 --packet-trace --disable-arp-ping -n
+```
+
+### RDP Security Check - Installation
+```
+sudo cpan
+cpan[1]> install Encoding::BER
+```
+```
+git clone https://github.com/CiscoCXSecurity/rdp-sec-check.git && cd rdp-sec-check
+./rdp-sec-check.pl 10.129.201.248
+```
+### Initiate an RDP Session
+```
+xfreerdp /u:cry0l1t3 /p:"P455w0rd!" /v:10.129.201.248
+```
+## WinRM
+### Footprinting the Service
+```
+nmap -sV -sC 10.129.201.248 -p5985,5986 --disable-arp-ping -n
+```
+### Evil-winrm
+```
+evil-winrm -i 10.129.201.248 -u Cry0l1t3 -p P455w0rD!
+```
+## WMI
+### Footprinting the Service
+```
+/usr/share/doc/python3-impacket/examples/wmiexec.py Cry0l1t3:"P455w0rD!"@10.129.201.248 "hostname"
+```
+
+
