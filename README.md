@@ -1,4 +1,4 @@
 # CPTS
 
-[Enumeration](enumeration.md) <br>
-[Information Gathering](InfoGathering.md)
+* [Enumeration](enumeration.md)
+* [Information Gathering](InfoGathering.md)
