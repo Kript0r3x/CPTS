@@ -11,7 +11,6 @@
    - [SSH and RDP](#ssh-and-rdp)
    - [WinRM](#winrm)
    - [WMI](#wmi)
-   - [RPCclient](#rpcclient)
 # Enumeration
 ```
 sudo nmap --script-updatedb
