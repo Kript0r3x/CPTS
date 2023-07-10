@@ -1,30 +1,3 @@
-| Element | Markdown Syntax |
-|----------|----------------|
-| Heading | #H1 |
-|        | ##H2 |
-|         | ###H3 |
-| Bold | **bold** |
-| Italic |  *Italic* |
-| Blockquote | > blockquote |
-| Ordered List | 1. First Item <br> 2. Second Item |
-|Unordered List |- First Item <br> - Second Item|
-|Code |`code`|
-|Horizontal Rule |---|
-| Link | [title](http://example.com)|
-| Image | ! [alt text](image.jpg) |
-| Fenced code Block | ``` <br> { <br>   "firstName": "John", <br>   "lastName": "Smith", <br>   "age": 25 <br> }| 
-| Footnote	| Here's a sentence with a footnote. [^1]<br>[^1]: This is the footnote.|
-|Heading ID	|### My Great Heading {#custom-id}|
-|Definition List	|term<br>: definition|
-| Strikethrough	|~~The world is flat.~~ |
- |Task List | 	<br> - [x] Write the press release <br>- [ ] Update the website <br> - [ ] Contact the media |
- | Emoji |	That is so funny! :joy: |
-|  Highlight |	I need to highlight these ==very important words==. |
-| Subscript	 |H~2~O |
- | Superscript |	X^2^|
-
-
-
 # Enumeration
 ```
 sudo nmap --script-updatedb
@@ -590,4 +563,28 @@ evil-winrm -i 10.129.201.248 -u Cry0l1t3 -p P455w0rD!
 /usr/share/doc/python3-impacket/examples/wmiexec.py Cry0l1t3:"P455w0rD!"@10.129.201.248 "hostname"
 ```
 
+| Element | Markdown Syntax |
+|----------|----------------|
+| Heading | #H1 |
+|        | ##H2 |
+|         | ###H3 |
+| Bold | **bold** |
+| Italic |  *Italic* |
+| Blockquote | > blockquote |
+| Ordered List | 1. First Item <br> 2. Second Item |
+|Unordered List |- First Item <br> - Second Item|
+|Code |`code`|
+|Horizontal Rule |---|
+| Link | [title](http://example.com)|
+| Image | ! [alt text](image.jpg) |
+| Fenced code Block | ``` <br> { <br>   "firstName": "John", <br>   "lastName": "Smith", <br>   "age": 25 <br> }| 
+| Footnote	| Here's a sentence with a footnote. [^1]<br>[^1]: This is the footnote.|
+|Heading ID	|### My Great Heading {#custom-id}|
+|Definition List	|term<br>: definition|
+| Strikethrough	|~~The world is flat.~~ |
+|Task List | 	<br> - [x] Write the press release <br>- [ ] Update the website <br> - [ ] Contact the media |
+| Emoji |	That is so funny! :joy: |
+|  Highlight |	I need to highlight these ==very important words==. |
+| Subscript	 |H~2~O |
+| Superscript |	X^2^|
 
