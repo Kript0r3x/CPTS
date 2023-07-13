@@ -5,7 +5,7 @@
    - [DNS](#dns)<br>
    - [SMTP, IMAP & POP3](#smtp-imap--pop3)
    - [SNMP](#snmp)
-   - [MySQL & MSSQL](#mysql-&-mssql)
+   - [MySQL & MSSQL](#mysql--mssql)
    - [Oracle TNS](#oracle-tns)
    - [IPMI](#ipmi)
    - [SSH and RDP](#ssh-and-rdp)
