@@ -1,5 +1,5 @@
 [File transfer cheatsheet](https://www.hackingarticles.in/file-transfer-cheatsheet-windows-and-linux/)
-
+[File transfer cheatsheet 2](https://blog.certcube.com/file-transfer-cheatsheet-for-pentesters/)
 # File Transfers
 ## Windows File Transfers
 ### Powershell Base64 Enconde & Decode
