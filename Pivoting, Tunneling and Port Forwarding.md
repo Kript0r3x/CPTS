@@ -1,5 +1,15 @@
-* [Pivoting, Tunneling and Port forwarding](pivoting-tunneling-and-port-forwarding)
-  - Dynamic Port Forwading with SSH and Socks Tunneling
+* [Pivoting, Tunneling and Port forwarding](#pivoting-tunneling-and-port-forwarding)
+  - Dynamic Port Forwading with SSH and Socks Tunneling(#dynamic-port-forwading-with-ssh-and-socks-tunneling)
+  - Reverse Port Forwarding with SSH(#reverse-port-forwarding-with-ssh)
+  - Meterpreter Tunneling & Port Forwarding(#meterpreter-tunneling--port-forwarding)
+  - Socat Redirection with a REverse Shell(#socat-redirection-with-a-reverse-shell)
+  - Socat Redirection with a Bind Shell(#socat-redirection-with-a-bind-shell)
+  - SSH for Windows: plink.exe(#ssh-for-windows-plinkexe)
+  - Web Server Pivoting with Rpivot(#web-server-pivoting-with-rpivot)
+  - Port Forwarding with Windows Netsh(#web-server-pivoting-with-rpivot)
+  - DNS Tunneling with Dnscat2(#dns-tunneling-with-dnscat2)
+  - SOCKS5 Tunneling with Chisel(#socks5-tunneling-with-chisel)
+  - ICMP Tunneling with SOCKS(#icmp--tunneling-with-socks)
   - 
 
 
