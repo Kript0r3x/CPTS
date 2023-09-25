@@ -1,17 +1,23 @@
-# Dynamic Port Forwading with SSH and Socks Tunneling
-## Executing the local Port Forward
+* [Pivoting, Tunneling and Port forwarding](pivoting-tunneling-and-port-forwarding)
+  - Dynamic Port Forwading with SSH and Socks Tunneling
+  - 
+
+
+# Pivoting, Tunneling and Port forwarding
+## Dynamic Port Forwading with SSH and Socks Tunneling
+### Executing the local Port Forward
 ```
 ssh -L <local port>:<Victim Ip>:<Remote Port> user@<machine-IP>
 ```
-## Confirming Port Forward with Netstat
+### Confirming Port Forward with Netstat
 ```
 netstat -antp | grep <port-no>
 ```
-## Confirming Port Forward with Nmap
+### Confirming Port Forward with Nmap
 ```
 nmap -v -sV -p<port-no> <machine-ip>
 ```
-## Forwarding multiple ports
+### Forwarding multiple ports
 ```
 ssh -L 1234:localhost:3306 8080:localhost:80 ubuntu@10.129.202.64
 ```
