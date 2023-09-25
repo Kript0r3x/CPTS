@@ -452,7 +452,9 @@ We can then connect to the target using xfreerdp and copy the SocksOverRDPx64.zi
 C:\Users\htb-student\Desktop\SocksOverRDP-x64> regsvr32.exe SocksOverRDP-Plugin.dll
 ```
 ![SocksOverRDP-Plugin.dll](/Assets/socksoverrdpdll.png)
-
+Now we can connect to 172.16.5.19 over RDP using mstsc.exe, and we should receive a prompt that the SocksOverRDP plugin is enabled, and it will listen on 127.0.0.1:1080.
+![pivoting to DC](/Assets/pivotingtoDC.png)
+We will need to transfer SocksOverRDPx64.zip or just the SocksOverRDP-Server.exe to 172.16.5.19. We can then start SocksOverRDP-Server.exe with Admin privileges.
 
 
 
