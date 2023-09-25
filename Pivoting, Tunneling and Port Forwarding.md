@@ -445,6 +445,13 @@ Proxychaining through the ICMP Tunnel
 proxychains nmap -sV -sT 172.16.5.19 -p3389
 ```
 
+## RDP and SOCKS Runneling with SocksOverRDP
+We can then connect to the target using xfreerdp and copy the SocksOverRDPx64.zip file to the target. From the Windows target, we will then need to load the SocksOverRDP.dll using regsvr32.exe.
+### Loading SocksOverRDP.dll using regsvr32.exe
+```
+C:\Users\htb-student\Desktop\SocksOverRDP-x64> regsvr32.exe SocksOverRDP-Plugin.dll
+```
+[SocksOverRDP-Plugin.dll](/Assets/socksoverrdpdll.png)
 
 
 
