@@ -451,7 +451,7 @@ We can then connect to the target using xfreerdp and copy the SocksOverRDPx64.zi
 ```
 C:\Users\htb-student\Desktop\SocksOverRDP-x64> regsvr32.exe SocksOverRDP-Plugin.dll
 ```
-[SocksOverRDP-Plugin.dll](/Assets/socksoverrdpdll.png)
+![SocksOverRDP-Plugin.dll](/Assets/socksoverrdpdll.png)
 
 
 
