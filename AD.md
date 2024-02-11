@@ -28,4 +28,6 @@ use wireshark to grather ARP, MDNS and other layer two packets.
 Responder is a tool built to listen, analyze, and poison LLMNR, NBT-NS, and MDNS requests and responses. It has many more functions.
 ### perform fping on the subnet to identify the live hosts
 ### nmap -- use it to enumerate all the hosts that we found till now.
-
+## Identifying users
+### Kerbrute
+Kerbrute can be a stealthier option for domain account enumeration. It takes advantage of the fact that Kerberos pre-authentication failures often will not trigger logs or alerts. We will use Kerbrute in conjunction with the jsmith.txt or jsmith2.txt user lists from Insidetrust. 
