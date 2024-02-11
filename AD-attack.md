@@ -1,0 +1,290 @@
+wireshark pcap - *from the scan results we can identify the hosts 172.16.5.130, 172.16.5.225, 172.16.5.5, 172.16.5.25, 172.16.5.240*
+responder - 
+SMB] NTLMv2-SSP Client   : 172.16.5.130
+[SMB] NTLMv2-SSP Username : INLANEFREIGHT\wley
+[SMB] NTLMv2-SSP Hash     : wley::INLANEFREIGHT:eac03c4ebe7a3640:E7224E0B34E76A007633D0FBC9324FB5:0101000000000000002C1B9DC45CDA01C45FD4767A1388C300000000020008005A005A003000590001001E00570049004E002D004B004D0048004300590048003100360041004500480004003400570049004E002D004B004D004800430059004800310036004100450048002E005A005A00300059002E004C004F00430041004C00030014005A005A00300059002E004C004F00430041004C00050014005A005A00300059002E004C004F00430041004C0007000800002C1B9DC45CDA01060004000200000008003000300000000000000000000000003000007338904EB27AB9CA6311C24ECFAD644779E7A7ED0B502513F41E2CE5925C9A6C0A001000000000000000000000000000000000000900220063006900660073002F003100370032002E00310036002E0035002E003200320035000000000000000000
+SMB] NTLMv2-SSP Client   : 172.16.5.130
+[SMB] NTLMv2-SSP Username : INLANEFREIGHT\wley
+[SMB] NTLMv2-SSP Hash     : wley::INLANEFREIGHT:eac03c4ebe7a3640:E7224E0B34E76A007633D0FBC9324FB5:0101000000000000002C1B9DC45CDA01C45FD4767A1388C300000000020008005A005A003000590001001E00570049004E002D004B004D0048004300590048003100360041004500480004003400570049004E002D004B004D004800430059004800310036004100450048002E005A005A00300059002E004C004F00430041004C00030014005A005A00300059002E004C004F00430041004C00050014005A005A00300059002E004C004F00430041004C0007000800002C1B9DC45CDA01060004000200000008003000300000000000000000000000003000007338904EB27AB9CA6311C24ECFAD644779E7A7ED0B502513F41E2CE5925C9A6C0A001000000000000000000000000000000000000900220063006900660073002F003100370032002E00310036002E0035002E003200320035000000000000000000
+[SMB] NTLMv2-SSP Client   : 172.16.5.130
+[SMB] NTLMv2-SSP Username : INLANEFREIGHT\forend
+[SMB] NTLMv2-SSP Hash     : forend::INLANEFREIGHT:7751275af35aad3e:B38ED442BE6EBB0611BE136B804FD2E5:0101000000000000002C1B9DC45CDA019D944AEF3F226E0700000000020008005A005A003000590001001E00570049004E002D004B004D0048004300590048003100360041004500480004003400570049004E002D004B004D004800430059004800310036004100450048002E005A005A00300059002E004C004F00430041004C00030014005A005A00300059002E004C004F00430041004C00050014005A005A00300059002E004C004F00430041004C0007000800002C1B9DC45CDA01060004000200000008003000300000000000000000000000003000007338904EB27AB9CA6311C24ECFAD644779E7A7ED0B502513F41E2CE5925C9A6C0A001000000000000000000000000000000000000900220063006900660073002F003100370032002E00310036002E0035002E003200320035000000000000000000
+[SMB] NTLMv2-SSP Client   : 172.16.5.130
+[SMB] NTLMv2-SSP Username : INLANEFREIGHT\clusteragent
+[SMB] NTLMv2-SSP Hash     : clusteragent::INLANEFREIGHT:3ab0625e66c63fc2:C2B046F1215FD105576FF9F16EC59121:0101000000000000002C1B9DC45CDA015ED605AF6AB6550D00000000020008005A005A003000590001001E00570049004E002D004B004D0048004300590048003100360041004500480004003400570049004E002D004B004D004800430059004800310036004100450048002E005A005A00300059002E004C004F00430041004C00030014005A005A00300059002E004C004F00430041004C00050014005A005A00300059002E004C004F00430041004C0007000800002C1B9DC45CDA01060004000200000008003000300000000000000000000000003000007338904EB27AB9CA6311C24ECFAD644779E7A7ED0B502513F41E2CE5925C9A6C0A001000000000000000000000000000000000000900220063006900660073002F003100370032002E00310036002E0035002E003200320035000000000000000000
+[SMB] NTLMv2-SSP Client   : 172.16.5.130
+[SMB] NTLMv2-SSP Username : INLANEFREIGHT\backupagent
+[SMB] NTLMv2-SSP Hash     : backupagent::INLANEFREIGHT:38251fb412fae64c:F2C2D1E29CDEFFF12C325095CD3E85BC:0101000000000000002C1B9DC45CDA01CE3629004F3E9BE200000000020008005A005A003000590001001E00570049004E002D004B004D0048004300590048003100360041004500480004003400570049004E002D004B004D004800430059004800310036004100450048002E005A005A00300059002E004C004F00430041004C00030014005A005A00300059002E004C004F00430041004C00050014005A005A00300059002E004C004F00430041004C0007000800002C1B9DC45CDA01060004000200000008003000300000000000000000000000003000007338904EB27AB9CA6311C24ECFAD644779E7A7ED0B502513F41E2CE5925C9A6C0A001000000000000000000000000000000000000900220063006900660073002F003100370032002E00310036002E0035002E003200320035000000000000000000
+
+fping -asqg 172.16.5.0/23
+172.16.5.5
+172.16.5.130
+172.16.5.225
+
+     510 targets
+       3 alive
+     507 unreachable
+       0 unknown addresses
+
+    2028 timeouts (waiting for response)
+    2031 ICMP Echos sent
+       3 ICMP Echo Replies received
+    2028 other ICMP received
+
+ 0.060 ms (min round trip time)
+ 0.363 ms (avg round trip time)
+ 0.701 ms (max round trip time)
+       15.247 sec (elapsed real time)
+## nmap scan results
+# Nmap 7.92 scan initiated Sun Feb 11 08:44:15 2024 as: nmap -A -v -iL hosts.txt -oN host-enum
+Nmap scan report for 172.16.5.25 [host down]
+Nmap scan report for 172.16.5.240 [host down]
+Nmap scan report for inlanefreight.local (172.16.5.5)
+Host is up (0.0015s latency).
+Not shown: 988 closed tcp ports (reset)
+PORT     STATE SERVICE       VERSION
+53/tcp   open  domain        Simple DNS Plus
+88/tcp   open  kerberos-sec  Microsoft Windows Kerberos (server time: 2024-02-11 13:44:53Z)
+135/tcp  open  msrpc         Microsoft Windows RPC
+139/tcp  open  netbios-ssn   Microsoft Windows netbios-ssn
+389/tcp  open  ldap          Microsoft Windows Active Directory LDAP (Domain: INLANEFREIGHT.LOCAL0., Site: Default-First-Site-Name)
+| ssl-cert: Subject: 
+| Subject Alternative Name: DNS:ACADEMY-EA-DC01.INLANEFREIGHT.LOCAL, DNS:INLANEFREIGHT.LOCAL, DNS:INLANEFREIGHT
+| Issuer: commonName=INLANEFREIGHT-CA
+| Public Key type: rsa
+| Public Key bits: 2048
+| Signature Algorithm: sha256WithRSAEncryption
+| Not valid before: 2023-10-27T13:11:32
+| Not valid after:  2024-10-26T13:11:32
+| MD5:   31bb 5869 5467 ea6b c85e 8018 7ed8 2c1e
+|_SHA-1: 4fc1 ebe6 4995 0e8b 761b 38b5 d411 4162 5690 8d4c
+|_ssl-date: 2024-02-11T13:46:47+00:00; 0s from scanner time.
+445/tcp  open  microsoft-ds?
+464/tcp  open  kpasswd5?
+593/tcp  open  ncacn_http    Microsoft Windows RPC over HTTP 1.0
+636/tcp  open  ssl/ldap      Microsoft Windows Active Directory LDAP (Domain: INLANEFREIGHT.LOCAL0., Site: Default-First-Site-Name)
+|_ssl-date: 2024-02-11T13:46:47+00:00; +1s from scanner time.
+| ssl-cert: Subject: 
+| Subject Alternative Name: DNS:ACADEMY-EA-DC01.INLANEFREIGHT.LOCAL, DNS:INLANEFREIGHT.LOCAL, DNS:INLANEFREIGHT
+| Issuer: commonName=INLANEFREIGHT-CA
+| Public Key type: rsa
+| Public Key bits: 2048
+| Signature Algorithm: sha256WithRSAEncryption
+| Not valid before: 2023-10-27T13:11:32
+| Not valid after:  2024-10-26T13:11:32
+| MD5:   31bb 5869 5467 ea6b c85e 8018 7ed8 2c1e
+|_SHA-1: 4fc1 ebe6 4995 0e8b 761b 38b5 d411 4162 5690 8d4c
+3268/tcp open  ldap          Microsoft Windows Active Directory LDAP (Domain: INLANEFREIGHT.LOCAL0., Site: Default-First-Site-Name)
+|_ssl-date: 2024-02-11T13:46:47+00:00; 0s from scanner time.
+| ssl-cert: Subject: 
+| Subject Alternative Name: DNS:ACADEMY-EA-DC01.INLANEFREIGHT.LOCAL, DNS:INLANEFREIGHT.LOCAL, DNS:INLANEFREIGHT
+| Issuer: commonName=INLANEFREIGHT-CA
+| Public Key type: rsa
+| Public Key bits: 2048
+| Signature Algorithm: sha256WithRSAEncryption
+| Not valid before: 2023-10-27T13:11:32
+| Not valid after:  2024-10-26T13:11:32
+| MD5:   31bb 5869 5467 ea6b c85e 8018 7ed8 2c1e
+|_SHA-1: 4fc1 ebe6 4995 0e8b 761b 38b5 d411 4162 5690 8d4c
+3269/tcp open  ssl/ldap      Microsoft Windows Active Directory LDAP (Domain: INLANEFREIGHT.LOCAL0., Site: Default-First-Site-Name)
+| ssl-cert: Subject: 
+| Subject Alternative Name: DNS:ACADEMY-EA-DC01.INLANEFREIGHT.LOCAL, DNS:INLANEFREIGHT.LOCAL, DNS:INLANEFREIGHT
+| Issuer: commonName=INLANEFREIGHT-CA
+| Public Key type: rsa
+| Public Key bits: 2048
+| Signature Algorithm: sha256WithRSAEncryption
+| Not valid before: 2023-10-27T13:11:32
+| Not valid after:  2024-10-26T13:11:32
+| MD5:   31bb 5869 5467 ea6b c85e 8018 7ed8 2c1e
+|_SHA-1: 4fc1 ebe6 4995 0e8b 761b 38b5 d411 4162 5690 8d4c
+|_ssl-date: 2024-02-11T13:46:46+00:00; 0s from scanner time.
+3389/tcp open  ms-wbt-server Microsoft Terminal Services
+| ssl-cert: Subject: commonName=ACADEMY-EA-DC01.INLANEFREIGHT.LOCAL
+| Issuer: commonName=ACADEMY-EA-DC01.INLANEFREIGHT.LOCAL
+| Public Key type: rsa
+| Public Key bits: 2048
+| Signature Algorithm: sha256WithRSAEncryption
+| Not valid before: 2023-10-26T10:30:21
+| Not valid after:  2024-04-26T10:30:21
+| MD5:   46df e9fc e1c9 30ed 7d05 ab52 d93e efd4
+|_SHA-1: 36d1 a425 3285 4484 9a7e 2441 6f04 ce67 01ec f2e7
+|_ssl-date: 2024-02-11T13:46:47+00:00; 0s from scanner time.
+| rdp-ntlm-info: 
+|   Target_Name: INLANEFREIGHT
+|   NetBIOS_Domain_Name: INLANEFREIGHT
+|   NetBIOS_Computer_Name: ACADEMY-EA-DC01
+|   DNS_Domain_Name: INLANEFREIGHT.LOCAL
+|   DNS_Computer_Name: ACADEMY-EA-DC01.INLANEFREIGHT.LOCAL
+|   Product_Version: 10.0.17763
+|_  System_Time: 2024-02-11T13:45:42+00:00
+MAC Address: 00:50:56:B9:EF:7F (VMware)
+No exact OS matches for host (If you know what OS is running on it, see https://nmap.org/submit/ ).
+TCP/IP fingerprint:
+OS:SCAN(V=7.92%E=4%D=2/11%OT=53%CT=1%CU=35748%PV=Y%DS=1%DC=D%G=Y%M=005056%T
+OS:M=65C8CFCD%P=x86_64-pc-linux-gnu)SEQ(SP=105%GCD=1%ISR=10B%TI=I%CI=I%II=I
+OS:%SS=S%TS=U)OPS(O1=M5B4NW8NNS%O2=M5B4NW8NNS%O3=M5B4NW8%O4=M5B4NW8NNS%O5=M
+OS:5B4NW8NNS%O6=M5B4NNS)WIN(W1=FFFF%W2=FFFF%W3=FFFF%W4=FFFF%W5=FFFF%W6=FF70
+OS:)ECN(R=Y%DF=Y%T=80%W=FFFF%O=M5B4NW8NNS%CC=Y%Q=)T1(R=Y%DF=Y%T=80%S=O%A=S+
+OS:%F=AS%RD=0%Q=)T2(R=Y%DF=Y%T=80%W=0%S=Z%A=S%F=AR%O=%RD=0%Q=)T3(R=Y%DF=Y%T
+OS:=80%W=0%S=Z%A=O%F=AR%O=%RD=0%Q=)T4(R=Y%DF=Y%T=80%W=0%S=A%A=O%F=R%O=%RD=0
+OS:%Q=)T5(R=Y%DF=Y%T=80%W=0%S=Z%A=S+%F=AR%O=%RD=0%Q=)T6(R=Y%DF=Y%T=80%W=0%S
+OS:=A%A=O%F=R%O=%RD=0%Q=)T7(R=Y%DF=Y%T=80%W=0%S=Z%A=S+%F=AR%O=%RD=0%Q=)U1(R
+OS:=Y%DF=N%T=80%IPL=164%UN=0%RIPL=G%RID=G%RIPCK=G%RUCK=G%RUD=G)IE(R=Y%DFI=N
+OS:%T=80%CD=Z)
+
+Network Distance: 1 hop
+TCP Sequence Prediction: Difficulty=261 (Good luck!)
+IP ID Sequence Generation: Incremental
+Service Info: Host: ACADEMY-EA-DC01; OS: Windows; CPE: cpe:/o:microsoft:windows
+
+Host script results:
+| nbstat: NetBIOS name: ACADEMY-EA-DC01, NetBIOS user: <unknown>, NetBIOS MAC: 00:50:56:b9:ef:7f (VMware)
+| Names:
+|   ACADEMY-EA-DC01<00>  Flags: <unique><active>
+|   INLANEFREIGHT<00>    Flags: <group><active>
+|   INLANEFREIGHT<1c>    Flags: <group><active>
+|   ACADEMY-EA-DC01<20>  Flags: <unique><active>
+|_  INLANEFREIGHT<1b>    Flags: <unique><active>
+| smb2-security-mode: 
+|   3.1.1: 
+|_    Message signing enabled and required
+| smb2-time: 
+|   date: 2024-02-11T13:45:42
+|_  start_date: N/A
+
+TRACEROUTE
+HOP RTT     ADDRESS
+1   1.47 ms inlanefreight.local (172.16.5.5)
+
+Nmap scan report for 172.16.5.130
+Host is up (0.0024s latency).
+Not shown: 992 closed tcp ports (reset)
+PORT      STATE SERVICE       VERSION
+80/tcp    open  http          Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP)
+135/tcp   open  msrpc         Microsoft Windows RPC
+139/tcp   open  netbios-ssn   Microsoft Windows netbios-ssn
+445/tcp   open  microsoft-ds?
+808/tcp   open  ccproxy-http?
+1433/tcp  open  ms-sql-s      Microsoft SQL Server 2019 15.00.2000.00; RTM
+| ssl-cert: Subject: commonName=SSL_Self_Signed_Fallback
+| Issuer: commonName=SSL_Self_Signed_Fallback
+| Public Key type: rsa
+| Public Key bits: 2048
+| Signature Algorithm: sha256WithRSAEncryption
+| Not valid before: 2024-02-11T12:36:22
+| Not valid after:  2054-02-11T12:36:22
+| MD5:   3429 0c98 1260 1085 6c52 70ec a68c a713
+|_SHA-1: b464 ab20 6151 1458 aa4d 3892 5678 dae6 d8e9 de1a
+|_ssl-date: 2024-02-11T13:46:47+00:00; 0s from scanner time.
+| ms-sql-ntlm-info: 
+|   Target_Name: INLANEFREIGHT
+|   NetBIOS_Domain_Name: INLANEFREIGHT
+|   NetBIOS_Computer_Name: ACADEMY-EA-FILE
+|   DNS_Domain_Name: INLANEFREIGHT.LOCAL
+|   DNS_Computer_Name: ACADEMY-EA-FILE.INLANEFREIGHT.LOCAL
+|   DNS_Tree_Name: INLANEFREIGHT.LOCAL
+|_  Product_Version: 10.0.17763
+3389/tcp  open  ms-wbt-server Microsoft Terminal Services
+| ssl-cert: Subject: commonName=ACADEMY-EA-FILE.INLANEFREIGHT.LOCAL
+| Issuer: commonName=ACADEMY-EA-FILE.INLANEFREIGHT.LOCAL
+| Public Key type: rsa
+| Public Key bits: 2048
+| Signature Algorithm: sha256WithRSAEncryption
+| Not valid before: 2024-02-10T12:36:07
+| Not valid after:  2024-08-11T12:36:07
+| MD5:   1a32 5eb2 da6e 6d5d 7fb2 6a18 a5c6 b2e2
+|_SHA-1: 23c7 4f22 c312 6d52 b638 af1d 1353 e8ed 36f4 7214
+|_ssl-date: 2024-02-11T13:46:47+00:00; +1s from scanner time.
+| rdp-ntlm-info: 
+|   Target_Name: INLANEFREIGHT
+|   NetBIOS_Domain_Name: INLANEFREIGHT
+|   NetBIOS_Computer_Name: ACADEMY-EA-FILE
+|   DNS_Domain_Name: INLANEFREIGHT.LOCAL
+|   DNS_Computer_Name: ACADEMY-EA-FILE.INLANEFREIGHT.LOCAL
+|   DNS_Tree_Name: INLANEFREIGHT.LOCAL
+|   Product_Version: 10.0.17763
+|_  System_Time: 2024-02-11T13:45:42+00:00
+16001/tcp open  mc-nmf        .NET Message Framing
+MAC Address: 00:50:56:B9:1B:8E (VMware)
+No exact OS matches for host (If you know what OS is running on it, see https://nmap.org/submit/ ).
+TCP/IP fingerprint:
+OS:SCAN(V=7.92%E=4%D=2/11%OT=80%CT=1%CU=30035%PV=Y%DS=1%DC=D%G=Y%M=005056%T
+OS:M=65C8CFCD%P=x86_64-pc-linux-gnu)SEQ(SP=FF%GCD=1%ISR=108%TI=I%CI=I%II=I%
+OS:SS=S%TS=U)OPS(O1=M5B4NW8NNS%O2=M5B4NW8NNS%O3=M5B4NW8%O4=M5B4NW8NNS%O5=M5
+OS:B4NW8NNS%O6=M5B4NNS)WIN(W1=FFFF%W2=FFFF%W3=FFFF%W4=FFFF%W5=FFFF%W6=FF70)
+OS:ECN(R=Y%DF=Y%T=80%W=FFFF%O=M5B4NW8NNS%CC=Y%Q=)T1(R=Y%DF=Y%T=80%S=O%A=S+%
+OS:F=AS%RD=0%Q=)T2(R=Y%DF=Y%T=80%W=0%S=Z%A=S%F=AR%O=%RD=0%Q=)T3(R=Y%DF=Y%T=
+OS:80%W=0%S=Z%A=O%F=AR%O=%RD=0%Q=)T4(R=Y%DF=Y%T=80%W=0%S=A%A=O%F=R%O=%RD=0%
+OS:Q=)T5(R=Y%DF=Y%T=80%W=0%S=Z%A=S+%F=AR%O=%RD=0%Q=)T6(R=Y%DF=Y%T=80%W=0%S=
+OS:A%A=O%F=R%O=%RD=0%Q=)T7(R=Y%DF=Y%T=80%W=0%S=Z%A=S+%F=AR%O=%RD=0%Q=)U1(R=
+OS:Y%DF=N%T=80%IPL=164%UN=0%RIPL=G%RID=G%RIPCK=G%RUCK=G%RUD=G)IE(R=Y%DFI=N%
+OS:T=80%CD=Z)
+
+Network Distance: 1 hop
+TCP Sequence Prediction: Difficulty=255 (Good luck!)
+IP ID Sequence Generation: Incremental
+Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows
+
+Host script results:
+| ms-sql-info: 
+|   172.16.5.130:1433: 
+|     Version: 
+|       name: Microsoft SQL Server 2019 RTM
+|       number: 15.00.2000.00
+|       Product: Microsoft SQL Server 2019
+|       Service pack level: RTM
+|       Post-SP patches applied: false
+|_    TCP port: 1433
+| nbstat: NetBIOS name: ACADEMY-EA-FILE, NetBIOS user: <unknown>, NetBIOS MAC: 00:50:56:b9:1b:8e (VMware)
+| Names:
+|   ACADEMY-EA-FILE<00>  Flags: <unique><active>
+|   INLANEFREIGHT<00>    Flags: <group><active>
+|_  ACADEMY-EA-FILE<20>  Flags: <unique><active>
+| smb2-time: 
+|   date: 2024-02-11T13:45:43
+|_  start_date: N/A
+| smb2-security-mode: 
+|   3.1.1: 
+|_    Message signing enabled but not required
+
+TRACEROUTE
+HOP RTT     ADDRESS
+1   2.42 ms 172.16.5.130
+
+Nmap scan report for 172.16.5.225
+Host is up (0.0016s latency).
+Not shown: 998 closed tcp ports (reset)
+PORT     STATE SERVICE       VERSION
+22/tcp   open  ssh           OpenSSH 8.4p1 Debian 5 (protocol 2.0)
+| ssh-hostkey: 
+|   3072 97:cc:9f:d0:a3:84:da:d1:a2:01:58:a1:f2:71:37:e5 (RSA)
+|   256 03:15:a9:1c:84:26:87:b7:5f:8d:72:73:9f:96:e0:f2 (ECDSA)
+|_  256 55:c9:4a:d2:63:8b:5f:f2:ed:7b:4e:38:e1:c9:f5:71 (ED25519)
+3389/tcp open  ms-wbt-server xrdp
+No exact OS matches for host (If you know what OS is running on it, see https://nmap.org/submit/ ).
+TCP/IP fingerprint:
+OS:SCAN(V=7.92%E=4%D=2/11%OT=22%CT=1%CU=33596%PV=Y%DS=0%DC=L%G=Y%TM=65C8CFE
+OS:7%P=x86_64-pc-linux-gnu)SEQ(SP=107%GCD=1%ISR=10D%TI=Z%CI=Z%II=I%TS=A)OPS
+OS:(O1=MFFD7ST11NWA%O2=MFFD7ST11NWA%O3=MFFD7NNT11NWA%O4=MFFD7ST11NWA%O5=MFF
+OS:D7ST11NWA%O6=MFFD7ST11)WIN(W1=FFCB%W2=FFCB%W3=FFCB%W4=FFCB%W5=FFCB%W6=FF
+OS:CB)ECN(R=Y%DF=Y%T=40%W=FFD7%O=MFFD7NNSNWA%CC=Y%Q=)T1(R=Y%DF=Y%T=40%S=O%A
+OS:=S+%F=AS%RD=0%Q=)T2(R=N)T3(R=N)T4(R=Y%DF=Y%T=40%W=0%S=A%A=Z%F=R%O=%RD=0%
+OS:Q=)T5(R=Y%DF=Y%T=40%W=0%S=Z%A=S+%F=AR%O=%RD=0%Q=)T6(R=Y%DF=Y%T=40%W=0%S=
+OS:A%A=Z%F=R%O=%RD=0%Q=)T7(R=Y%DF=Y%T=40%W=0%S=Z%A=S+%F=AR%O=%RD=0%Q=)U1(R=
+OS:Y%DF=N%T=40%IPL=164%UN=0%RIPL=G%RID=G%RIPCK=G%RUCK=G%RUD=G)IE(R=Y%DFI=N%
+OS:T=40%CD=S)
+
+Uptime guess: 21.290 days (since Sun Jan 21 01:49:43 2024)
+Network Distance: 0 hops
+TCP Sequence Prediction: Difficulty=263 (Good luck!)
+IP ID Sequence Generation: All zeros
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+Post-scan script results:
+| clock-skew: 
+|   0s: 
+|     172.16.5.5 (inlanefreight.local)
+|_    172.16.5.130
+Read data files from: /usr/bin/../share/nmap
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Sun Feb 11 08:47:19 2024 -- 5 IP addresses (3 hosts up) scanned in 183.70 seconds
