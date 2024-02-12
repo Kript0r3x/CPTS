@@ -187,3 +187,7 @@ sudo bloodhound-python -u 'forend' -p 'Klmcargo2' -ns 172.16.5.5 -d inlanefreigh
 ```
 zip the results and upload to the bloodhound gui to run queries on the data.
 
+AD cheatsheet
+```
+https://wadcoms.github.io/
+```
