@@ -89,3 +89,50 @@ hashcat -m 19700 aes_to_crack /usr/share/wordlists/rockyou.txt
 
 ![image](https://github.com/Kript0r3x/CPTS/assets/65650002/e8cf8acc-d7b1-4e10-8b70-d0d5f8003528)
 
+ForceChangePassword abused with Set-DomainUserPassword
+Add Members abused with Add-DomainGroupMember
+GenericAll abused with Set-DomainUserPassword or Add-DomainGroupMember
+GenericWrite abused with Set-DomainObject
+WriteOwner abused with Set-DomainObjectOwner
+WriteDACL abused with Add-DomainObjectACL
+AllExtendedRights abused with Set-DomainUserPassword or Add-DomainGroupMember
+Addself abused with Add-DomainGroupMember
+
+- ForceChangePassword - gives us the right to reset a user's password without first knowing their password (should be used cautiously and typically best to consult our client before resetting passwords).
+- GenericWrite - gives us the right to write to any non-protected attribute on an object. If we have this access over a user, we could assign them an SPN and perform a Kerberoasting attack (which relies on the target account having a weak password set). Over a group means we could add ourselves or another security principal to a given group. Finally, if we have this access over a computer object, we could perform a resource-based constrained delegation attack which is outside the scope of this module.
+- AddSelf - shows security groups that a user can add themselves to.
+- GenericAll - this grants us full control over a target object. Again, depending on if this is granted over a user or group, we could modify group membership, force change a password, or perform a targeted Kerberoasting attack. If we have this access over a computer object and the Local Administrator Password Solution (LAPS) is in use in the environment, we can read the LAPS password and gain local admin access to the machine which may aid us in lateral movement or privilege escalation in the domain if we can obtain privileged controls or gain some sort of privileged access.
+
+## Enumerating ACLs with PowerView
+```
+ Find-InterestingDomainAcl
+```
+```
+Import-Module .\PowerView.ps1
+$sid = Convert-NameToSid wley
+Get-DomainObjectACL -Identity * | ? {$_.SecurityIdentifier -eq $sid}
+```
+### Performing a Reverse Search & Mapping to a GUID Value
+```
+$guid= "00299570-246d-11d0-a768-00aa006e0529"
+Get-ADObject -SearchBase "CN=Extended-Rights,$((Get-ADRootDSE).ConfigurationNamingContext)" -Filter {ObjectClass -like 'ControlAccessRight'} -Properties * |Select Name,DisplayName,DistinguishedName,rightsGuid| ?{$_.rightsGuid -eq $guid} | fl
+```
+### Using the -ResolveGUIDs Flag
+```
+Get-DomainObjectACL -ResolveGUIDs -Identity * | ? {$_.SecurityIdentifier -eq $sid}
+```
+### Creating a List of Domain Users
+```
+Get-ADUser -Filter * | Select-Object -ExpandProperty SamAccountName > ad_users.txt
+```
+### A useful for loop
+```
+foreach($line in [System.IO.File]::ReadLines("C:\Users\htb-student\Desktop\ad_users.txt")) {get-acl  "AD:\$(Get-ADUser $line)" | Select-Object Path -ExpandProperty Access | Where-Object {$_.IdentityReference -match 'INLANEFREIGHT\\wley'}}
+```
+keep on enumerate the rights and depending on it look for the domain groups, nested groups and their permissions
+### finding the nested group
+```
+Get-DomainGroup -Identity "Help Desk Level 1" | select memberof
+```
+
+ACLs can also be enumerated easily by using bloodhoud. Look for **outbound control rights** it will give us lot of information.
