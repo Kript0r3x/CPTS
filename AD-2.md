@@ -87,3 +87,5 @@ hashcat -m 19700 aes_to_crack /usr/share/wordlists/rockyou.txt
 /tgtdeleg flag can be used to downgrade encryption to RC4. Only works on server 2016 and older.
 
 
+![image](https://github.com/Kript0r3x/CPTS/assets/65650002/e8cf8acc-d7b1-4e10-8b70-d0d5f8003528)
+
