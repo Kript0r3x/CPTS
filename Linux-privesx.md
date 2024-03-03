@@ -37,7 +37,7 @@
 - Uncomplicated Firewall (ufw) \
 In a domain environment we'll definitely want to check **/etc/resolv.conf** if the host is configured to use internal DNS we may be able to use this as a starting point to query the Active Directory environment.
 
-**Password Hashe**
+**Password Hashes**
 | Algorithm | Hash |
 | --- | --- |
 | Salted MD5 | $1$... |
