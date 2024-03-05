@@ -66,3 +66,8 @@ Look for config files, such as files ending with .conf and .config for usernames
 ### Credential Hunting
 ```find / ! -path "*/proc/*" -iname "*config*" -type f 2>/dev/null```
 SSH keys ```ls ~/.ssh```
+### Escaping Restricted shells
+https://www.hacknos.com/rbash-escape-rbash-restricted-shell-escape/
+### Special Permissions
+```find / -user root -perm -4000 -exec ls -ldb {} \; 2>/dev/null```
+```find / -user root -perm -6000 -exec ls -ldb {} \; 2>/dev/null```
