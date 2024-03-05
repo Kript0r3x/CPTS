@@ -160,7 +160,7 @@ screen -ls # screen itself is setuid, so...
 /tmp/rootshell
 ```
 ### LXC
-Must be in either LXC or LXD group \ 
+Must be in either LXC or LXD group   
 And if there is already a container on the system with little to no security we can import the container as follows
 ```lxc image import ubuntu-template.tar.xz --alias ubuntutemp
 lxc image list
