@@ -86,6 +86,7 @@ https://www.hacknos.com/rbash-escape-rbash-restricted-shell-escape/
  - ADM group - can read /var/log
 ### Capabilities
 - Set Capability: ```sudo setcap cap_net_bind_service=+ep /usr/bin/vim.basic```
+
 | Capability | Description |
 | --- | --- |
 | cap_sys_admin | Allows to perform actions with administrative privileges, such as modifying system files or changing system settings. |
