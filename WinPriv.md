@@ -1,0 +1,21 @@
+### Enumeration
+- ```ipconfing /all```
+- ```arp -a```
+- ```route print```
+- Defender Status ```Get-MpComputerStatus```
+- Applocker rules ```Get-AppLockerPolicy -Effective | select -ExpandProperty RuleCollections```
+- Test Applocker policy ```Get-AppLockerPolicy -Local | Test-AppLockerPolicy -path C:\Windows\System32\cmd.exe -User Everyone```
+- Running Services ```tasklist /svc```
+- env variables cmd ```set```
+- cmd ```systeminfo```
+- Patches and updates cmd ```wmic qfe``` PS ```Get-HotFix | ft -AutoSize```
+- Installed programs cmd ```wmic product get name``` PS ```Get-WmiObject -Class Win32_Product |  select Name, Version```
+- running processes cmd ```netstat -ano```
+- Logged-In users cmd ```query user```
+- Current User ```echo %USERNAME%```
+- Current User Privileges ```whoami /priv```
+- Current User group info ```whoami /groups```
+- Get all users cmd ```net user```
+- Get all Groups cmd ```net localgroup```
+- Group Details cmd ```net localgroup administrators```
+- Get Password Policy & Other Account Information cmd ```net accounts```
